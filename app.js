@@ -31,12 +31,12 @@ const getPokemonsType = async (pokeApiResults) => {
   const fulfilled = await getOnlyFullfilled({ array: pokeApiResults, fetchFunc: (result) => fetch(result.url) });
   const pokePromises = fulfilled.map((url) => url.value.json());
   const pokemons = await Promise.all(pokePromises);
-  return pokemons.map((fulfilled) => fulfilled.types.map((info) => info.type.name));
+  return pokemons.map((fulfilled) => fulfilled.types.map((info) => DOMPurify.sanitize(info.type.name)));
 };
 
 const getPokemonIds = (pokeApiResults) =>
   pokeApiResults.map(({ url }) => {
-    const urlAsArray = url.split('/');
+    const urlAsArray = DOMPurify.sanitize(url).split('/');
     return urlAsArray.at(urlAsArray.length - 2);
   });
 
@@ -45,22 +45,56 @@ const getPokemonsImages = async (ids) => {
   return fulfilled.map((response) => response.value.url);
 };
 
-const handlePageLoad = async () => {
+const getPokemons = async () => {
   try {
     const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=15&offset=0');
 
     if (!response.ok) {
-      throw Error('Não foi possível obter as informações');
+      throw new Error('Não foi possível obter as informações');
     }
 
     const { results: pokeApiResults } = await response.json();
     const types = await getPokemonsType(pokeApiResults);
     const ids = getPokemonIds(pokeApiResults);
     const images = await getPokemonsImages(ids);
-    console.log(images);
+    const pokemons = ids.map((id, i) => ({ id, name: pokeApiResults[i].name, types: types[i], imgUrl: images[i] }));
+
+    return pokemons;
   } catch (error) {
     console.error(error);
   }
+};
+
+const renderPokemons = (pokemons) => {
+  const ul = document.querySelector('[data-js="pokemons-list"]');
+  const fragment = document.createDocumentFragment();
+  console.log(fragment);
+
+  pokemons.forEach(({ id, name, types, imgUrl }) => {
+    const li = document.createElement('li');
+    const img = document.createElement('img');
+    const nameContainer = document.createElement('h2');
+    const typeContainer = document.createElement('p');
+    const [firstType] = types;
+
+    img.setAttribute('src', imgUrl);
+    img.setAttribute('alt', name);
+    img.setAttribute('class', 'card-image');
+    li.setAttribute('class', `card ${firstType}`);
+    li.style.backgroundColor = getTypeColor(firstType);
+
+    nameContainer.textContent = `${id}. ${name[0].toUpperCase()}${name.slice(1)}`;
+    typeContainer.textContent = types.length > 1 ? types.join(' | ') : firstType;
+    li.append(img, nameContainer, typeContainer);
+    fragment.append(li);
+  });
+
+  ul.append(fragment);
+};
+
+const handlePageLoad = async () => {
+  const pokemons = await getPokemons();
+  renderPokemons(pokemons);
 };
 
 handlePageLoad();
