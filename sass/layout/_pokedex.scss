@@ -1,0 +1,18 @@
+.container {
+    max-width: 1024px;
+    margin-inline: auto;
+    padding: 2rem;
+    text-align: center;
+
+    &__title {
+        padding-block: 3rem;
+        font-size: 4rem;
+    }
+
+    &__pokedex {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        justify-items: center;
+        gap: 25px;
+    }
+}

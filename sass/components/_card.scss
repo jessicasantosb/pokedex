@@ -1,0 +1,24 @@
+@use "../base/variables"as *;
+
+.card {
+    padding: 15px;
+    border-radius: 5px;
+
+    & .card-image {
+        border-radius: 5px;
+    }
+
+    & h2,
+    p {
+        color: $primary;
+        background: transparent;
+    }
+
+    & h2 {
+        padding-top: 10px;
+    }
+
+    & p {
+        padding-bottom: 10px;
+    }
+}
