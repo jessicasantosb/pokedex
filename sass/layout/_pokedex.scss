@@ -1,18 +1,22 @@
 .container {
     max-width: 1024px;
     margin-inline: auto;
-    padding: 2rem;
+    padding: 1rem;
     text-align: center;
 
     &__title {
         padding-block: 3rem;
         font-size: 4rem;
+
+        @media screen and (max-width: 700px) {
+            font-size: 3rem;
+        }
     }
 
     &__pokedex {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(3, minmax(90px, 1fr));
         justify-items: center;
-        gap: 25px;
+        gap: 20px;
     }
 }

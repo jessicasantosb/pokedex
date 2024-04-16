@@ -8,10 +8,15 @@
 }
 
 .card {
-  padding: 15px;
+  width: 100%;
+  padding: 5px;
   border-radius: 5px;
 }
+.card:hover {
+  opacity: 0.7;
+}
 .card .card-image {
+  width: 100%;
   border-radius: 5px;
 }
 .card h2,
@@ -21,24 +26,41 @@
 }
 .card h2 {
   padding-top: 10px;
+  font-size: 1.15rem;
+}
+@media screen and (max-width: 700px) {
+  .card h2 {
+    font-size: 0.75rem;
+  }
 }
 .card p {
   padding-bottom: 10px;
+  font-size: 0.75rem;
+}
+@media screen and (max-width: 700px) {
+  .card p {
+    font-size: 0.7rem;
+  }
 }
 
 .container {
   max-width: 1024px;
   margin-inline: auto;
-  padding: 2rem;
+  padding: 1rem;
   text-align: center;
 }
 .container__title {
   padding-block: 3rem;
   font-size: 4rem;
 }
+@media screen and (max-width: 700px) {
+  .container__title {
+    font-size: 3rem;
+  }
+}
 .container__pokedex {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(90px, 1fr));
   justify-items: center;
-  gap: 25px;
+  gap: 20px;
 }/*# sourceMappingURL=main.css.map */
